@@ -1,0 +1,2 @@
+ALTER TABLE deployments ADD COLUMN IF NOT EXISTS commit_hash VARCHAR(40);
+ALTER TABLE deployments ADD COLUMN IF NOT EXISTS rollback_from_id VARCHAR(36);

@@ -1,0 +1,282 @@
+<div class="landing" [attr.data-mode]="isDark() ? 'dark' : 'light'">
+
+    <!-- ═══════════ NAVBAR ═══════════ -->
+    <header class="navbar" id="landing-navbar">
+        <div class="nav-inner">
+            <a class="brand" routerLink="/">
+                <img [src]="isDark() ? 'logo-dark.png' : 'logo-light.png'" alt="depl@yes logo" class="brand-logo">
+                <span class="brand-name">depl@yes</span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="#features" class="nav-link">{{ 'LANDING.NAV_FEATURES' | translate }}</a>
+                <a href="#how-it-works" class="nav-link">{{ 'LANDING.NAV_HOW' | translate }}</a>
+                <a href="#tech-stack" class="nav-link">{{ 'LANDING.NAV_TECH' | translate }}</a>
+            </nav>
+
+            <div class="nav-end">
+                <!-- Dil Seçici -->
+                <app-language-switcher></app-language-switcher>
+                <!-- Tema Toggle -->
+                <button class="theme-btn" (click)="toggleTheme()"
+                    [title]="isDark() ? ('LANDING.LIGHT_MODE' | translate) : ('LANDING.DARK_MODE' | translate)"
+                    [attr.aria-label]="'LANDING.THEME_TOGGLE' | translate">
+                    <i class='bx' [class.bx-sun]="isDark()" [class.bx-moon]="!isDark()"></i>
+                </button>
+                <a routerLink="/login" class="btn btn-ghost">{{ 'LANDING.LOGIN' | translate }}</a>
+                <a routerLink="/register" class="btn btn-nav-cta">{{ 'LANDING.REGISTER' | translate }}</a>
+            </div>
+
+            <button class="mobile-toggle" (click)="toggleMobileMenu()" aria-label="Menü">
+                <i class='bx bx-menu'></i>
+            </button>
+        </div>
+
+        <!-- Mobil Dropdown -->
+        <div class="mobile-menu" id="mobile-menu">
+            <a href="#features" class="nav-link" (click)="toggleMobileMenu()">{{ 'LANDING.NAV_FEATURES' | translate
+                }}</a>
+            <a href="#how-it-works" class="nav-link" (click)="toggleMobileMenu()">{{ 'LANDING.NAV_HOW' | translate
+                }}</a>
+            <a href="#tech-stack" class="nav-link" (click)="toggleMobileMenu()">{{ 'LANDING.NAV_TECH' | translate }}</a>
+            <hr class="mobile-divider">
+            <app-language-switcher></app-language-switcher>
+            <a routerLink="/login" class="btn btn-ghost">{{ 'LANDING.LOGIN' | translate }}</a>
+            <a routerLink="/register" class="btn btn-primary" (click)="toggleMobileMenu()">{{ 'LANDING.REGISTER' |
+                translate }}</a>
+        </div>
+    </header>
+
+    <!-- ═══════════ HERO ═══════════ -->
+    <section class="hero" id="hero">
+        <div class="hero-bg">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="grid-overlay"></div>
+        </div>
+
+        <div class="hero-content reveal">
+            <img [src]="isDark() ? 'logo-dark.png' : 'logo-light.png'" alt="depl@yes" class="hero-logo">
+
+            <div class="hero-badge">
+                <span class="badge-pulse"></span>
+                {{ 'LANDING.HERO_BADGE' | translate }}
+            </div>
+
+            <h1 class="hero-title">
+                {{ 'LANDING.HERO_TITLE_1' | translate }}<br>
+                <span class="gradient-text">{{ 'LANDING.HERO_TITLE_2' | translate }}</span>
+            </h1>
+
+            <p class="hero-sub">
+                {{ 'LANDING.HERO_DESC' | translate }}
+            </p>
+
+            <div class="hero-actions">
+                <a routerLink="/register" class="btn btn-primary btn-lg">
+                    {{ 'LANDING.CTA_START' | translate }} <i class='bx bx-right-arrow-alt'></i>
+                </a>
+                <a href="https://github.com/aliicolak/deployes" target="_blank" class="btn btn-outline btn-lg">
+                    <i class='bx bxl-github'></i> {{ 'LANDING.CTA_GITHUB' | translate }}
+                </a>
+            </div>
+
+            <!-- Terminal Mockup -->
+            <div class="terminal-card reveal" style="transition-delay:.2s">
+                <div class="term-bar">
+                    <span class="term-dot t-red"></span>
+                    <span class="term-dot t-yellow"></span>
+                    <span class="term-dot t-green"></span>
+                    <span class="term-title">depl@yes — bash</span>
+                </div>
+                <div class="term-body" id="terminal-output">
+                    <!-- JavaScript ile doldurulur -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════ FEATURES ═══════════ -->
+    <section class="section features-section" id="features">
+        <div class="section-inner">
+            <div class="section-header reveal">
+                <p class="section-label">{{ 'LANDING.NAV_FEATURES' | translate }}</p>
+                <h2 class="section-title">{{ 'LANDING.FEATURES_TITLE' | translate }}</h2>
+                <p class="section-desc">{{ 'LANDING.FEATURES_DESC' | translate }}</p>
+            </div>
+
+            <div class="feat-grid stagger-group">
+                <div class="feat-card stagger-item">
+                    <div class="feat-icon">
+                        <i class='bx bx-send'></i>
+                    </div>
+                    <h3 class="feat-title">{{ 'LANDING.FEAT1_TITLE' | translate }}</h3>
+                    <p class="feat-desc">{{ 'LANDING.FEAT1_DESC' | translate }}</p>
+                </div>
+
+                <div class="feat-card stagger-item">
+                    <div class="feat-icon">
+                        <i class='bx bxl-github'></i>
+                    </div>
+                    <h3 class="feat-title">{{ 'LANDING.FEAT2_TITLE' | translate }}</h3>
+                    <p class="feat-desc">{{ 'LANDING.FEAT2_DESC' | translate }}</p>
+                </div>
+
+                <div class="feat-card stagger-item">
+                    <div class="feat-icon">
+                        <i class='bx bx-server'></i>
+                    </div>
+                    <h3 class="feat-title">{{ 'LANDING.FEAT3_TITLE' | translate }}</h3>
+                    <p class="feat-desc">{{ 'LANDING.FEAT3_DESC' | translate }}</p>
+                </div>
+
+                <div class="feat-card stagger-item">
+                    <div class="feat-icon">
+                        <i class='bx bx-shield-quarter'></i>
+                    </div>
+                    <h3 class="feat-title">{{ 'LANDING.FEAT4_TITLE' | translate }}</h3>
+                    <p class="feat-desc">{{ 'LANDING.FEAT4_DESC' | translate }}</p>
+                </div>
+
+                <div class="feat-card stagger-item">
+                    <div class="feat-icon">
+                        <i class='bx bx-key'></i>
+                    </div>
+                    <h3 class="feat-title">{{ 'LANDING.FEAT5_TITLE' | translate }}</h3>
+                    <p class="feat-desc">{{ 'LANDING.FEAT5_DESC' | translate }}</p>
+                </div>
+
+                <div class="feat-card stagger-item">
+                    <div class="feat-icon">
+                        <i class='bx bx-terminal'></i>
+                    </div>
+                    <h3 class="feat-title">{{ 'LANDING.FEAT6_TITLE' | translate }}</h3>
+                    <p class="feat-desc">{{ 'LANDING.FEAT6_DESC' | translate }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════ HOW IT WORKS ═══════════ -->
+    <section class="section hiw-section" id="how-it-works">
+        <div class="section-inner">
+            <div class="section-header reveal">
+                <p class="section-label">{{ 'LANDING.SETUP' | translate }}</p>
+                <h2 class="section-title">{{ 'LANDING.HIW_TITLE' | translate }}</h2>
+                <p class="section-desc">{{ 'LANDING.HIW_DESC' | translate }}
+                </p>
+            </div>
+
+            <div class="steps stagger-group">
+                <div class="step stagger-item">
+                    <div class="step-num">01</div>
+                    <div class="step-body">
+                        <h3 class="step-title">{{ 'LANDING.STEP1_TITLE' | translate }}</h3>
+                        <p class="step-desc">{{ 'LANDING.STEP1_DESC' | translate }}</p>
+                    </div>
+                </div>
+
+                <div class="step-connector stagger-item"></div>
+
+                <div class="step stagger-item">
+                    <div class="step-num">02</div>
+                    <div class="step-body">
+                        <h3 class="step-title">{{ 'LANDING.STEP2_TITLE' | translate }}</h3>
+                        <p class="step-desc">{{ 'LANDING.STEP2_DESC' | translate }}</p>
+                    </div>
+                </div>
+
+                <div class="step-connector stagger-item"></div>
+
+                <div class="step stagger-item">
+                    <div class="step-num">03</div>
+                    <div class="step-body">
+                        <h3 class="step-title">{{ 'LANDING.STEP3_TITLE' | translate }}</h3>
+                        <p class="step-desc">{{ 'LANDING.STEP3_DESC' | translate }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════ TECH STACK ═══════════ -->
+    <section class="section tech-section" id="tech-stack">
+        <div class="section-inner">
+            <div class="section-header reveal">
+                <p class="section-label">{{ 'LANDING.NAV_TECH' | translate }}</p>
+                <h2 class="section-title">{{ 'LANDING.TECH_TITLE' | translate }}</h2>
+                <p class="section-desc">{{ 'LANDING.TECH_DESC' | translate }}</p>
+            </div>
+
+            <div class="tech-grid stagger-group">
+                <div class="tech-card stagger-item">
+                    <i class='bx bxl-go-lang tech-logo' style="color:#00ADD8"></i>
+                    <h4 class="tech-name">Go Backend</h4>
+                    <p class="tech-desc">{{ 'LANDING.TECH_GO_DESC' | translate }}</p>
+                </div>
+
+                <div class="tech-card stagger-item">
+                    <i class='bx bxl-angular tech-logo' style="color:#DD0031"></i>
+                    <h4 class="tech-name">Angular 21</h4>
+                    <p class="tech-desc">{{ 'LANDING.TECH_ANGULAR_DESC' | translate }}</p>
+                </div>
+
+                <div class="tech-card stagger-item">
+                    <i class='bx bxs-data tech-logo' style="color:#336791"></i>
+                    <h4 class="tech-name">PostgreSQL</h4>
+                    <p class="tech-desc">{{ 'LANDING.TECH_PG_DESC' | translate }}</p>
+                </div>
+
+                <div class="tech-card stagger-item">
+                    <i class='bx bxl-docker tech-logo' style="color:#2496ED"></i>
+                    <h4 class="tech-name">Docker Ready</h4>
+                    <p class="tech-desc">{{ 'LANDING.TECH_DOCKER_DESC' | translate }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════ CTA ═══════════ -->
+    <!-- ═══════════ CTA (Removed as requested) ═══════════ -->
+
+    <!-- ═══════════ FOOTER ═══════════ -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="brand">
+                    <img [src]="isDark() ? 'logo-dark.png' : 'logo-light.png'" alt="depl@yes logo" class="brand-logo">
+                    <span class="brand-name">depl@yes</span>
+                </div>
+                <p class="footer-tagline">{{ 'LANDING.FOOTER_TAGLINE' | translate }}</p>
+                <div class="footer-social">
+                    <a href="https://github.com/aliicolak/deployes" target="_blank" aria-label="GitHub">
+                        <i class='bx bxl-github'></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-links-group">
+                <h5 class="footer-group-title">{{ 'LANDING.FOOTER_PRODUCT' | translate }}</h5>
+                <ul>
+                    <li><a href="#features">{{ 'LANDING.NAV_FEATURES' | translate }}</a></li>
+                    <li><a href="#how-it-works">{{ 'LANDING.NAV_HOW' | translate }}</a></li>
+                    <li><a href="#tech-stack">{{ 'LANDING.NAV_TECH' | translate }}</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links-group">
+                <h5 class="footer-group-title">{{ 'LANDING.FOOTER_COMMUNITY' | translate }}</h5>
+                <ul>
+                    <li><a href="https://github.com/aliicolak/deployes" target="_blank">Repository</a></li>
+                    <li><a href="https://github.com/aliicolak/deployes/issues" target="_blank">Issues</a></li>
+                    <li><a href="https://github.com/aliicolak/deployes/pulls" target="_blank">Pull Requests</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>{{ 'LANDING.FOOTER_LICENSE' | translate }}</p>
+            <p>{{ 'LANDING.FOOTER_CREDITS' | translate }}</p>
+        </div>
+    </footer>
+</div>

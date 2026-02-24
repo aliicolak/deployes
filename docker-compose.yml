@@ -1,0 +1,36 @@
+services:
+  # Database Service
+  postgres:
+    image: postgres:15-alpine
+    container_name: deployes_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-deployes}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB: ${POSTGRES_DB:-deployes}
+    expose:
+      - "5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  # Fullstack Application (Go API + Angular Web)
+  app:
+    build: .
+    container_name: deployes_app
+    ports:
+      - "80:8080"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=${DATABASE_URL:?DATABASE_URL is required}
+      - JWT_SECRET=${JWT_SECRET:?JWT_SECRET is required}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY:?ENCRYPTION_KEY is required}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost:4200}
+      - APP_PORT=${APP_PORT:-8080}
+      - BASE_URL=${BASE_URL:-http://localhost:8080}
+    depends_on:
+      - postgres
+    restart: always
+
+volumes:
+  postgres_data:

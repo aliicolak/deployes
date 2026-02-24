@@ -1,0 +1,459 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ==========================================================================
+   SLIDING PANEL AUTH DESIGN - Glassmorphism & Micro-Interactions
+   ========================================================================== */
+
+.auth-page {
+    /* Soft pattern / dark mode base */
+    background: var(--bg-primary);
+    background-image: radial-gradient(circle at top right, rgba(75, 123, 245, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at bottom left, rgba(107, 33, 255, 0.05) 0%, transparent 40%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Inter', sans-serif;
+    height: 100vh;
+    margin: 0;
+    padding: 1rem;
+    overflow: hidden;
+}
+
+/* ────────── Main Container ────────── */
+.container {
+    background-color: var(--bg-card);
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    box-shadow:
+        0 14px 28px rgba(0, 0, 0, 0.08),
+        0 10px 10px rgba(0, 0, 0, 0.04),
+        0 0 40px rgba(75, 123, 245, 0.08);
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 880px;
+    min-height: 580px;
+    /* Soft transition if resizing */
+    transition: all 0.3s ease;
+}
+
+/* ────────── Form Kapsayıcıları ────────── */
+.form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.sign-in-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.sign-up-container {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+}
+
+/* .right-panel-active Tetikleyicisi */
+.container.right-panel-active .sign-in-container {
+    transform: translateX(100%);
+    opacity: 0;
+    z-index: 1;
+}
+
+.container.right-panel-active .sign-up-container {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: show 0.6s;
+}
+
+@keyframes show {
+
+    0%,
+    49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 1;
+        z-index: 5;
+    }
+}
+
+/* Form Styles */
+form {
+    background-color: var(--bg-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
+    text-align: center;
+}
+
+.font-bold {
+    font-weight: 800;
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.8rem;
+    letter-spacing: -0.5px;
+}
+
+.subtext {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 8px 0 24px 0;
+}
+
+.forgot-password {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-decoration: none;
+    margin: 15px 0 5px;
+    transition: color 0.2s ease;
+}
+
+.forgot-password:hover {
+    color: var(--accent);
+}
+
+.auth-logo {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    margin-bottom: 20px;
+}
+
+/* ────────── Üst Aksiyon Butonları (Home & Theme) ────────── */
+.top-actions {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    display: flex;
+    gap: 12px;
+}
+
+.icon-btn {
+    color: var(--text-muted);
+    font-size: 1.4rem;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn:hover {
+    color: var(--accent);
+    transform: scale(1.1);
+}
+
+.theme-btn {
+    font-size: 1.5rem;
+}
+
+/* ────────── Input Alanları (Mikro-etkileşimli) ────────── */
+.input-wrapper {
+    position: relative;
+    width: 100%;
+    margin: 8px 0;
+}
+
+.input-wrapper i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 1.15rem;
+    transition: color 0.3s ease;
+    pointer-events: none;
+}
+
+.input-wrapper input {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 14px 15px 14px 45px;
+    width: 100%;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--text-primary);
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.input-wrapper input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+/* Focus Action (Glow & Border) */
+.input-wrapper input:focus {
+    border-color: var(--accent);
+    background-color: transparent;
+    box-shadow: 0 0 0 4px rgba(75, 123, 245, 0.15);
+    /* Soft Glow */
+}
+
+/* İkonun Rengini Accent Yap */
+.input-wrapper input:focus+i,
+.input-wrapper input:valid:not(:placeholder-shown)+i {
+    color: var(--accent);
+}
+
+.error-box {
+    width: 100%;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #EF4444;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 15px;
+}
+
+/* ────────── Butonlar ────────── */
+button {
+    border-radius: 30px;
+    font-family: inherit;
+    border: 1px solid transparent;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 14px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.2s ease, opacity 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.primary-btn {
+    background-color: var(--accent);
+    color: #ffffff;
+    margin-top: 15px;
+    width: 100%;
+    box-shadow: 0 4px 14px rgba(75, 123, 245, 0.3);
+    /* Base shadow */
+}
+
+.primary-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(75, 123, 245, 0.5);
+    /* Hover shadow */
+}
+
+.primary-btn:active:not(:disabled) {
+    transform: scale(0.97);
+    box-shadow: 0 2px 10px rgba(75, 123, 245, 0.3);
+}
+
+.primary-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--text-muted);
+    box-shadow: none;
+}
+
+.ghost-btn {
+    background-color: transparent;
+    border-color: #ffffff;
+    color: #ffffff;
+}
+
+.ghost-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* ────────── Overlay Panel (Kayan Glassmorphism Bölümü) ────────── */
+.overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: 100;
+    /* Soft Shadow on moving panel */
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+}
+
+.container.right-panel-active .overlay-container {
+    transform: translateX(-100%);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+}
+
+.overlay {
+    background: linear-gradient(135deg, var(--accent) 0%, #6B21FF 100%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0 0;
+    color: #ffffff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+    /* GLASSMORPHISM ÖZELLİĞİ */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+/* Dekoratif Işık Hüzmeleri */
+.overlay::before,
+.overlay::after {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: -1;
+}
+
+.overlay::before {
+    background: rgba(255, 255, 255, 0.15);
+    top: -100px;
+    left: -100px;
+}
+
+.overlay::after {
+    background: rgba(0, 0, 0, 0.1);
+    bottom: -100px;
+    right: -100px;
+}
+
+.container.right-panel-active .overlay {
+    transform: translateX(50%);
+}
+
+.overlay-panel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-sizing: border-box;
+}
+
+.overlay-left {
+    transform: translateX(-20%);
+}
+
+.container.right-panel-active .overlay-left {
+    transform: translateX(0);
+}
+
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+.container.right-panel-active .overlay-right {
+    transform: translateX(20%);
+}
+
+.overlay-panel h1 {
+    font-weight: 800;
+    margin: 0;
+    font-size: 2.2rem;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    /* Global :root'tan gelip ezilmemesi için kesin renk */
+}
+
+.overlay-panel p {
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.6;
+    letter-spacing: 0.3px;
+    margin: 20px 0 35px;
+    opacity: 1;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    /* Global :root'tan gelip ezilmemesi için kesin renk */
+}
+
+
+/* ────────── Responsive Mod (Mobilde Normal Alt Alta Liste) ────────── */
+@media (max-width: 768px) {
+    .container {
+        min-height: auto;
+        flex-direction: column;
+        display: flex;
+    }
+
+    .form-container {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: 40px 0;
+    }
+
+    .overlay-container {
+        display: none;
+        /* Mobilde sliding karmaşıktır, gizle */
+    }
+
+    .sign-up-container {
+        display: none;
+    }
+
+    .container.right-panel-active .sign-in-container {
+        display: none;
+    }
+
+    .container.right-panel-active .sign-up-container {
+        display: block;
+        opacity: 1;
+        transform: translateX(0);
+        position: relative;
+    }
+}

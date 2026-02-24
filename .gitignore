@@ -1,0 +1,55 @@
+﻿# Binaries
+*.exe
+*.dll
+*.so
+*.dylib
+bin/
+api.exe
+
+# Dependency directories
+node_modules/
+web/node_modules/
+
+# Build results
+web/dist/
+web/.angular/
+web/.cache/
+dist/
+
+# Environment variables and secrets
+.env
+.env.local
+.env.production
+*.env
+!.env.example
+deployment_keys/
+secrets/
+*.pem
+*.key
+id_rsa
+id_rsa.pub
+
+# Server-specific configs (may contain IPs/credentials)
+nginx-deployes.conf
+start-deployes.sh
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Temp and Backup files
+*~
+*.bak
+*.tmp
