@@ -270,15 +270,17 @@ Bu proje MIT Lisansı altında lisanslanmıştır - detaylar için [LICENSE](LIC
 
 ---
 
-## 👨‍💻 Geliştiriciler
+## 👨‍💻 Katkıda Bulunanlar
 
-**Ali Çolak**
+<a href="https://github.com/aliicolak">
+  <img src="https://github.com/aliicolak.png?size=100" width="100" height="100" alt="Ali ÇOLAK" style="border-radius: 50%; margin-right: 20px;" />
+</a>
+<a href="https://github.com/Alpersahin11">
+  <img src="https://github.com/Alpersahin11.png?size=100" width="100" height="100" alt="Alper ŞAHİN" style="border-radius: 50%;" />
+</a>
 
-- GitHub: [@aliicolak](https://github.com/aliicolak)
-
-**Alper Şahin**
-
-- GitHub: [@Alpersahin11](https://github.com/Alpersahin11)
+**Ali ÇOLAK** ([@aliicolak](https://github.com/aliicolak))  
+**Alper ŞAHİN** ([@Alpersahin11](https://github.com/Alpersahin11))
 ---
 
 <div align="center">
