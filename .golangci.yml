@@ -1,0 +1,80 @@
+run:
+  timeout: 5m
+  issues-exit-code: 1
+  tests: true
+
+output:
+  formats:
+    - format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+
+linters:
+  enable:
+    - gofmt
+    - goimports
+    - govet
+    - errcheck
+    - staticcheck
+    - unused
+    - gosimple
+    - structcheck
+    - varcheck
+    - ineffassign
+    - deadcode
+    - typecheck
+    - gocyclo
+    - dupl
+    - goconst
+    - misspell
+    - lll
+    - prealloc
+    - exportloopref
+    - exhaustive
+    - sqlclosecheck
+    - bodyclose
+
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+    check-blank: true
+
+  govet:
+    check-shadowing: true
+
+  gocyclo:
+    min-complexity: 15
+
+  dupl:
+    threshold: 100
+
+  goconst:
+    min-len: 3
+    min-occurrences: 3
+
+  misspell:
+    locale: US
+
+  lll:
+    line-length: 120
+    tab-width: 4
+
+  goimports:
+    local-prefixes: deployes
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+
+    - path: internal/infrastucture/database/migrations/
+      linters:
+        - all
+
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  new: false

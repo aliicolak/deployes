@@ -1,0 +1,56 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: detect-private-key
+
+  - repo: https://github.com/dnephin/pre-commit-golang
+    rev: v0.5.1
+    hooks:
+      - id: go-fmt
+      - id: go-vet
+      - id: go-imports
+      - id: go-cyclo
+        args: [-over=15]
+      - id: validate-toml
+      - id: no-go-testing
+      - id: golangci-lint
+      - id: go-unit-tests
+      - id: go-build
+      - id: go-mod-tidy
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        types_or: [javascript, jsx, ts, tsx, json, css, scss, markdown]
+        additional_dependencies:
+          - prettier@3.1.0
+
+  - repo: local
+    hooks:
+      - id: go-test
+        name: go-test
+        entry: make test
+        language: system
+        pass_filenames: false
+        always_run: true
+
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false

@@ -16,6 +16,11 @@ web/.angular/
 web/.cache/
 dist/
 
+# Test coverage
+coverage.out
+coverage.html
+*.coverprofile
+
 # Environment variables and secrets
 .env
 .env.local

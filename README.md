@@ -4,11 +4,16 @@
 
 ### GitHub Deployment Automation Platform
 
-[![Go Version](https://img.shields.io/badge/Go-1.21+-00ADD8?style=for-the-badge&logo=go&logoColor=white)](https://golang.org/)
-[![Angular](https://img.shields.io/badge/Angular-18+-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.io/)
+[![Go Version](https://img.shields.io/badge/Go-1.24+-00ADD8?style=for-the-badge&logo=go&logoColor=white)](https://golang.org/)
+[![Angular](https://img.shields.io/badge/Angular-21+-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.io/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+
+[![CI](https://github.com/aliicolak/deployes/workflows/CI/badge.svg)](https://github.com/aliicolak/deployes/actions)
+[![codecov](https://codecov.io/gh/aliicolak/deployes/branch/main/graph/badge.svg)](https://codecov.io/gh/aliicolak/deployes)
+[![Go Report Card](https://goreportcard.com/badge/github.com/aliicolak/deployes)](https://goreportcard.com/report/github.com/aliicolak/deployes)
+[![Maintainability](https://api.codeclimate.com/v1/badges/YOUR_TOKEN/maintainability)](https://codeclimate.com/github/aliicolak/deployes/maintainability)
 
 **deployes is a self-hosted, modern deployment automation platform that enables you to deploy your GitHub projects to remote servers with a single click or automatically via webhooks.**
 
@@ -254,13 +259,35 @@ systemctl restart myapp.service
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+We love contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+### Quick Start
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/deployes.git`
+3. Create a feature branch: `git checkout -b feature/amazing-feature`
+4. Make your changes and test: `make test`
+5. Commit your changes: `git commit -m 'feat: add amazing feature'`
+6. Push to the branch: `git push origin feature/amazing-feature`
+7. Open a Pull Request
+
+### Development
+
+```bash
+# Install dependencies
+make deps
+
+# Run tests
+make test
+
+# Run linter
+make lint
+
+# Build
+make build
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for full guidelines.
 
 ---
 
