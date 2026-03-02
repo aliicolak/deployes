@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.deployes.com/sitemap.xml
+
+# Block internal/auth pages
+Disallow: /login
+Disallow: /register
+Disallow: /dashboard
+Disallow: /projects
+Disallow: /servers
+Disallow: /deployments
+Disallow: /webhooks
+Disallow: /settings
+
+# Allow static assets
+Allow: /assets/
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.svg$
+
+# Crawl delay
+Crawl-delay: 1
