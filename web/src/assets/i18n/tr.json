@@ -162,7 +162,7 @@
         "HELLO_FRIEND": "Merhaba, Dostum!",
         "HELLO_FRIEND_DESC": "Zaten bir hesabınız yoksa, hemen ücretsiz oluşturup deploy işlemlerine başlayın.",
         "PASSWORDS_MISMATCH": "Şifreler eşleşmiyor!",
-        "PASSWORD_REQUIREMENTS": "Şifre en az 8 karakter, büyük harf, küçük harf ve rakam içermeli"
+        "PASSWORD_REQUIREMENTS": "Şifre en az 8 karakter, büyük harf, küçük harf ve rakam içermeli",
         "LOGIN_FAILED": "Giriş yapılamadı.",
         "REGISTER_FAILED": "Kayıt yapılamadı.",
         "HOME": "Ana Sayfa",
