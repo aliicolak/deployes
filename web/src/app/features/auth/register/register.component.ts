@@ -49,6 +49,11 @@ import { LanguageSwitcherComponent } from '../../../shared/components/language-s
           <i class='bx bx-lock-alt'></i>
           <input type="password" formControlName="password" [placeholder]="'AUTH.PASSWORD' | translate" />
         </div>
+        @if (registerForm.get('password')?.errors?.['passwordWeak']) {
+          <div class="error-box" style="font-size: 12px; margin-top: -10px; margin-bottom: 10px;">
+            {{ 'AUTH.PASSWORD_REQUIREMENTS' | translate }}
+          </div>
+        }
 
         <div class="input-wrapper">
           <i class='bx bx-lock-alt'></i>
@@ -143,9 +148,22 @@ export class RegisterComponent {
 
   registerForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', [Validators.required, Validators.minLength(8), this.passwordValidator]],
     confirmPassword: ['', [Validators.required]]
   });
+
+  // Custom password validator
+  private passwordValidator(control: any) {
+    const value = control.value;
+    if (!value) return null;
+    
+    const hasUpper = /[A-Z]/.test(value);
+    const hasLower = /[a-z]/.test(value);
+    const hasDigit = /[0-9]/.test(value);
+    
+    const valid = hasUpper && hasLower && hasDigit;
+    return valid ? null : { passwordWeak: true };
+  }
 
   get isDarkMode(): boolean {
     return this.themeService.theme() === 'dark';
