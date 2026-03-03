@@ -162,6 +162,7 @@
         "HELLO_FRIEND": "Hello, Friend!",
         "HELLO_FRIEND_DESC": "Don't have an account yet? Create one for free and start deploying.",
         "PASSWORDS_MISMATCH": "Passwords don't match!",
+        "PASSWORD_REQUIREMENTS": "Password must be at least 8 characters with uppercase, lowercase, and number",
         "LOGIN_FAILED": "Login failed.",
         "REGISTER_FAILED": "Registration failed.",
         "HOME": "Home",
