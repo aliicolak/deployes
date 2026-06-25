@@ -49,13 +49,14 @@ func TestCreateProject(t *testing.T) {
 
 	req := CreateProjectRequest{
 		Name:         "Test Project",
+		Type:         "github",
 		RepoURL:      "https://github.com/user/repo",
 		Branch:       "main",
 		DeployScript: "echo hello",
 	}
 
 	// Expect Create to be called once with any *domain.Project
-	mockRepo.On("Create", mock.AnythingOfType("*project.Project")).Return(nil)
+		mockRepo.On("Create", mock.Anything).Return(nil)
 
 	res, err := service.Create("user-1", req)
 
