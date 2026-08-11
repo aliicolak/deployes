@@ -49,8 +49,6 @@ func TestAuthMiddleware_MissingToken(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		rr := httptest.NewRecorder()
-
 		// Check that Authorization header is empty
 		if req.Header.Get("Authorization") != "" {
 			t.Error("Expected empty Authorization header")

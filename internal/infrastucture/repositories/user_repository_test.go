@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"testing"
 
-	"deployes/internal/domain"
+	domain "deployes/internal/domain/user"
 
 	_ "github.com/lib/pq"
 )
@@ -37,7 +37,7 @@ func TestUserRepository_GetByEmail(t *testing.T) {
 		db, _ := sql.Open("postgres", "postgres://localhost/test?sslmode=disable")
 		repo := NewUserRepository(db)
 
-		_, err := repo.GetByEmail("nonexistent@example.com")
+		_, err := repo.FindByEmail("nonexistent@example.com")
 		if err == nil {
 			t.Error("Expected error for non-existent user")
 		}
@@ -54,7 +54,6 @@ func TestUserRepository_Update(t *testing.T) {
 		// Structure test
 		var user domain.User
 		user.Email = "test@example.com"
-		user.Username = "testuser"
 
 		if user.Email != "test@example.com" {
 			t.Errorf("Expected email test@example.com, got %s", user.Email)

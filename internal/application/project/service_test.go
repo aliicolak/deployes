@@ -49,6 +49,7 @@ func TestCreateProject(t *testing.T) {
 
 	req := CreateProjectRequest{
 		Name:         "Test Project",
+		Type:         string(domain.ProjectTypeGitHub),
 		RepoURL:      "https://github.com/user/repo",
 		Branch:       "main",
 		DeployScript: "echo hello",
