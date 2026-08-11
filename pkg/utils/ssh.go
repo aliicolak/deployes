@@ -1,11 +1,13 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net"
 	"os"
 	"path/filepath"
+	"sync"
 	"time"
 
 	"golang.org/x/crypto/ssh"
@@ -16,14 +18,22 @@ import (
 type SSHConnectionMode int
 
 const (
-	// SSHModeStrict requires host key to be in known_hosts file
+	// SSHModeStrict requires the host key to already be in known_hosts.
+	// An unknown host is rejected.
 	SSHModeStrict SSHConnectionMode = iota
-	// SSHModeTrustOnFirstUse accepts and stores host key on first connection
+	// SSHModeTrustOnFirstUse accepts an unknown host key, persists it to
+	// known_hosts, and verifies against it on every later connection.
 	SSHModeTrustOnFirstUse
 )
 
-// CreateSSHClient creates SSH connection with private key or password
-// For production, use SSHModeStrict with a properly configured known_hosts file
+// knownHostsMu serializes read-modify-write cycles on the known_hosts file.
+// The deploy worker, the terminal handler and the server service can all open
+// connections concurrently.
+var knownHostsMu sync.Mutex
+
+// CreateSSHClient creates SSH connection with private key or password.
+// Uses trust-on-first-use host key verification: the first connection to a host
+// records its key, and any later key change is rejected.
 func CreateSSHClient(host string, port int, username string, secret string) (*ssh.Client, error) {
 	return CreateSSHClientWithMode(host, port, username, secret, SSHModeTrustOnFirstUse)
 }
@@ -44,7 +54,7 @@ func CreateSSHClientWithMode(host string, port int, username string, secret stri
 	}
 
 	// Get host key callback based on mode
-	hostKeyCallback, err := getHostKeyCallback(host, port, mode)
+	hostKeyCallback, err := getHostKeyCallback(mode)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create host key callback: %w", err)
 	}
@@ -69,37 +79,99 @@ func CreateSSHClientWithMode(host string, port int, username string, secret stri
 	return conn, nil
 }
 
-// getHostKeyCallback returns appropriate host key callback based on mode
-func getHostKeyCallback(host string, port int, mode SSHConnectionMode) (ssh.HostKeyCallback, error) {
-	knownHostsPath := getKnownHostsPath()
+// getHostKeyCallback returns a callback that verifies the host key against
+// known_hosts. In trust-on-first-use mode an unknown host is learned and
+// persisted; in either mode a key that contradicts a stored one is rejected.
+func getHostKeyCallback(mode SSHConnectionMode) (ssh.HostKeyCallback, error) {
+	path := knownHostsPath()
 
-	switch mode {
-	case SSHModeStrict:
-		// Strict mode: require host key to be in known_hosts
-		if _, err := os.Stat(knownHostsPath); os.IsNotExist(err) {
-			return nil, fmt.Errorf("known_hosts file not found at %s - create it or use TrustOnFirstUse mode", knownHostsPath)
-		}
-		return knownhosts.New(knownHostsPath)
-
-	case SSHModeTrustOnFirstUse:
-		// Trust on first use: accept and log warning
-		// In production, you should use SSHModeStrict
-		log.Printf("⚠️  SSH: Using Trust-On-First-Use mode for %s:%d - verify server authenticity!", host, port)
-
-		// Create a callback that logs the host key on first use
-		return func(hostname string, remote net.Addr, key ssh.PublicKey) error {
-			log.Printf("🔑 SSH: Accepting host key for %s (fingerprint: %s)", hostname, ssh.FingerprintSHA256(key))
-			// In a full implementation, you would save this to known_hosts
-			return nil
-		}, nil
-
-	default:
+	if mode != SSHModeStrict && mode != SSHModeTrustOnFirstUse {
 		return nil, fmt.Errorf("unknown SSH connection mode")
 	}
+
+	if mode == SSHModeStrict {
+		if _, err := os.Stat(path); err != nil {
+			return nil, fmt.Errorf("known_hosts file not found at %s - connect once in trust-on-first-use mode or provision it manually", path)
+		}
+	} else if err := ensureKnownHostsFile(path); err != nil {
+		return nil, err
+	}
+
+	verify, err := knownhosts.New(path)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read %s: %w", path, err)
+	}
+
+	return func(hostname string, remote net.Addr, key ssh.PublicKey) error {
+		err := verify(hostname, remote, key)
+		if err == nil {
+			return nil
+		}
+
+		var keyErr *knownhosts.KeyError
+		if !errors.As(err, &keyErr) {
+			return err
+		}
+
+		// Want is non-empty when known_hosts holds a *different* key for this
+		// host. That is the man-in-the-middle case and is never acceptable.
+		if len(keyErr.Want) > 0 {
+			return fmt.Errorf(
+				"host key mismatch for %s: the server presented %s but %s records a different key - "+
+					"this may be a man-in-the-middle attack; if the host was legitimately rebuilt, remove its entry from %s",
+				hostname, ssh.FingerprintSHA256(key), path, path,
+			)
+		}
+
+		// Host is not in known_hosts at all.
+		if mode == SSHModeStrict {
+			return fmt.Errorf("unknown host %s (fingerprint %s) and strict mode is enabled", hostname, ssh.FingerprintSHA256(key))
+		}
+
+		if err := appendKnownHost(path, hostname, key); err != nil {
+			return fmt.Errorf("failed to record host key for %s: %w", hostname, err)
+		}
+		log.Printf("🔑 SSH: learned host key for %s (fingerprint: %s)", hostname, ssh.FingerprintSHA256(key))
+		return nil
+	}, nil
 }
 
-// getKnownHostsPath returns the path to the known_hosts file
-func getKnownHostsPath() string {
+// ensureKnownHostsFile creates the known_hosts file and its directory when
+// missing, so that the first ever connection has something to read.
+func ensureKnownHostsFile(path string) error {
+	knownHostsMu.Lock()
+	defer knownHostsMu.Unlock()
+
+	if err := os.MkdirAll(filepath.Dir(path), 0700); err != nil {
+		return fmt.Errorf("failed to create %s: %w", filepath.Dir(path), err)
+	}
+	f, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY, 0600)
+	if err != nil {
+		return fmt.Errorf("failed to create %s: %w", path, err)
+	}
+	return f.Close()
+}
+
+// appendKnownHost records a newly seen host key.
+func appendKnownHost(path, hostname string, key ssh.PublicKey) error {
+	knownHostsMu.Lock()
+	defer knownHostsMu.Unlock()
+
+	f, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	line := knownhosts.Line([]string{knownhosts.Normalize(hostname)}, key)
+	if _, err := f.WriteString(line + "\n"); err != nil {
+		return err
+	}
+	return nil
+}
+
+// knownHostsPath returns the path to the known_hosts file
+func knownHostsPath() string {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return ".ssh/known_hosts"
