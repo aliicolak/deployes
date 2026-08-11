@@ -11,26 +11,50 @@ services:
       - "5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    # The app has no connection retry — it exits on the first failed ping.
+    # This gate makes the app wait until Postgres actually accepts connections.
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-deployes} -d ${POSTGRES_DB:-deployes}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
     restart: always
 
   # Fullstack Application (Go API + Angular Web)
   app:
     build: .
     container_name: deployes_app
+    # Behind a reverse proxy, change this to "127.0.0.1:8090:8080" so the app
+    # is not reachable directly from the internet over plain HTTP.
     ports:
       - "8090:8080"
     env_file:
       - .env
     environment:
+      # NOTE: the host here must be the compose service name "postgres",
+      # not localhost — see .env.example.
       - DATABASE_URL=${DATABASE_URL:?DATABASE_URL is required}
       - JWT_SECRET=${JWT_SECRET:?JWT_SECRET is required}
       - ENCRYPTION_KEY=${ENCRYPTION_KEY:?ENCRYPTION_KEY is required}
-      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost:4200}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:?ALLOWED_ORIGINS is required}
       - APP_PORT=${APP_PORT:-8080}
-      - BASE_URL=${BASE_URL:-http://localhost:8080}
+      - BASE_URL=${BASE_URL:?BASE_URL is required (used to build webhook URLs)}
+    volumes:
+      # Uploaded projects — lost on every rebuild without this.
+      - app_uploads:/app/uploads
+      # SSH known_hosts for target servers.
+      - app_ssh:/app/.ssh
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     restart: always
 
 volumes:
   postgres_data:
+  app_uploads:
+  app_ssh:
